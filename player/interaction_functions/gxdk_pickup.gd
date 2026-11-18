@@ -306,7 +306,8 @@ func pickup_object(object : GrabObject):
 
 	if object.body is RigidBody3D or object.body is PhysicalBone3D:
 		# Make sure our body doesn't collide with things we've picked up
-		GXDK.add_collision_exception(_xr_player_object, object.body)
+		if _xr_player_object:
+			GXDK.add_collision_exception(_xr_player_object, object.body)
 
 		# Get some behaviour characteristics
 		var rigid_body_behaviour: GXDKRigidBodyBehaviour = GXDKRigidBodyBehaviour.get_behaviour_node(object.body)
@@ -318,8 +319,9 @@ func pickup_object(object : GrabObject):
 			_grab_as_static_body = false
 
 		# If object is frozen, always treat like a static body.
-		if object.body is RigidBody3D and object.body.freeze:
-			_grab_as_static_body = true
+		#TODO: Handle Freezing/unfreezing bodies that request it with behaviour node
+		#if object.body is RigidBody3D and object.body.freeze:
+		#	_grab_as_static_body = true
 	elif object.body is StaticBody3D:
 		_pivot_on_primary = false
 		_grab_as_static_body = true
